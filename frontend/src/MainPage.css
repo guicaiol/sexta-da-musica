@@ -1,0 +1,11 @@
+.MainPage {
+    width: 70%;
+    margin: 0 auto;
+    border: 1px solid #111111;
+    padding: 15px;
+}
+
+.Footer {
+    margin-top: 5px;
+    font-size: 8px;
+}

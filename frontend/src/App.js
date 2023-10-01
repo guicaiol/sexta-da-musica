@@ -1,24 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import './App.css'
+import MainPage from './MainPage.js'
 
 function App() {
+
+  const [date, setDate] = useState()
+
+  function updateData() {
+    // Update datetime
+    setDate(new Date().toLocaleString()+"")
+  }
+
+  useEffect(() => {
+    // Update first time
+    updateData();
+
+    // Setup interval to update constantly
+    const interval = setInterval(updateData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="app-header">
+        <div className="app-pagesize">
+          <div className="app-name">Sexta da Música</div>
+          <div className="app-datetime">{date}</div>
+        </div>
+      </div>
+      <div className="app-body">
+        <MainPage />
+      </div>
     </div>
   );
 }
