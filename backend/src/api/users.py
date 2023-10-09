@@ -1,7 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response
 from models.user import User
 from models.music import Music
 from app.app import musicApp
+import json
 
 # Create blueprint
 api_users = Blueprint('api_users', __name__, template_folder='templates')
@@ -19,11 +20,11 @@ def api_users_route():
 
         # Check if user already exists
         if(musicApp.userExists(user_id)):
-            return {"error": "user-already-exists", "message": f"Usuário '{user_id}' já existe."}, 422
+            return Response(json.dumps({"error": "user-already-exists", "message": f"Usuário '{user_id}' já existe."}), mimetype='application/json'), 422
         
         # Add new user
         musicApp.addUser(User(user_id, user_name))
-        return {"message": "Usuário criado."}, 200
+        return Response(json.dumps({"message": "Usuário criado."}), mimetype='application/json'), 204
     else:
         return "Not found", 404
 
