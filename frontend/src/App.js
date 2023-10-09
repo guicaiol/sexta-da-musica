@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'
 import MainPage from './MainPage.js'
+import { ReactSession } from 'react-client-session';
 
 function App() {
+  ReactSession.setStoreType("localStorage");
 
   const [date, setDate] = useState()
 

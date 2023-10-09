@@ -1,50 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
+import LoadingPage from './LoadingPage';
+import { ReactSession } from 'react-client-session';
 import './MainPage.css'
 
 function MainPage() {
 
-    //const [users, setUsers] = useState([]);
-    //const [user, setUser] = useState(null);
-    const isLoggedIn = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     function updateData() {
-        /*
-        // Update users
-        fetch("/api/users")
-            .then(response => {
-            if(!response.ok) {
-                throw new Error(response.statusText)
-            }
-            response.json().then((data) => {
-                setUsers(data)
-            })
-        });
-        */
+        // Check user session
+        let session_user = ReactSession.get("user");
+        if(session_user!=null) {
+            // Check user exists
+            fetch("/api/users/"+session_user.id)
+                .then(async response => {
+                    const isJson = response.headers.get('content-type').includes('application/json');
+                    const data = isJson && await response.json();
+                    if(!response.ok) {
+                        const error = (data && data.message) || response.status;
+                        alert("GET /api/users/"+session_user.id+" error: "+error+"\nData: "+data);
+                        setUser(null);
+                        setIsLoggedIn(false);
+                        ReactSession.set("user", null);
+                    } else {
+                        setUser(session_user);
+                        setIsLoggedIn(true);
+                    }
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
+        } else {
+            setLoading(false);
+        }
     }
 
-    useEffect(() => {   
+    useEffect(() => {
         // Update first time
         updateData();
 
         // Setup interval to update constantly
-        const interval = setInterval(updateData, 1000);
+        const interval = setInterval(updateData, 5000);
         return () => clearInterval(interval);
     }, []);
 
     return (
         <>
         <div className="MainPage">
-            {isLoggedIn? <LoginPage /> : <HomePage />}
-            {/*
-            app-body
-            Users:<br />
-            {users.map((user) => (
-            <div>{user.id} / {user.name}</div>
-            ))}
-            */}
-            
+            {loading? <LoadingPage /> : !isLoggedIn? <LoginPage /> : <HomePage user={user} />}
         </div>
         <div className="Footer"><b>Sexta da Musica</b> - Contribua com esse projeto: <a href="https://github.com/guicaiol/sexta-da-musica" target="_blank" rel="noopener noreferrer">GitHub</a></div>
         </>

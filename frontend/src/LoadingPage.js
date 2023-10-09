@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function HomePage({user}) {
+function LoadingPage() {
 
     function updateData() {
 
@@ -16,11 +16,10 @@ function HomePage({user}) {
     }, []);
 
     return (
-        <div className="HomePage">
-            Home Page
-            User: {user!=null? user.id : "null"} / {user!=null? user.name : "null"}
+        <div className="LoadingPage">
+            Loading...
         </div>
     );
 }
 
-export default HomePage;
+export default LoadingPage;
