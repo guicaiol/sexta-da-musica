@@ -24,7 +24,7 @@ def api_users_route():
         
         # Add new user
         musicApp.addUser(User(user_id, user_name))
-        return Response(json.dumps({"message": "Usuário criado."}), mimetype='application/json'), 204
+        return Response(json.dumps({"message": "Usuário criado."}), mimetype='application/json'), 200
     else:
         return "Not found", 404
 
