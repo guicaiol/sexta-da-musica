@@ -19,7 +19,7 @@ def api_users_route():
 
         # Check if user already exists
         if(musicApp.userExists(user_id)):
-            return {"error": "user-already-exists", "message": "Usuário '{user_id}' já existe."}, 422
+            return {"error": "user-already-exists", "message": f"Usuário '{user_id}' já existe."}, 422
         
         # Add new user
         musicApp.addUser(User(user_id, user_name))
