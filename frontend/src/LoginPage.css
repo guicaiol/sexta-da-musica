@@ -6,3 +6,19 @@
 .login-input {
     margin: 10px 0;
 }
+
+#login-message {
+    font-weight: bold;
+}
+
+#login-message.login-message-error {
+    color: red;
+}
+
+#login-message.login-message-success {
+    color: green;
+}
+
+#login-message.login-message-loading {
+    color: blue;
+}

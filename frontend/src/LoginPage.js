@@ -28,6 +28,11 @@ function LoginPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        let login_message = document.getElementById("login-message");
+        login_message.className = "login-message-loading";
+        login_message.innerHTML = "Carregando...";
+        login_message.removeAttribute("hidden");
+
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -40,11 +45,16 @@ function LoginPage() {
 
                 if(!response.ok) {
                     // get error message from body or default to response status
-                    const error = (data && data.message) || response.status;
-                    alert("POST /api/users error: "+error+"\nData: "+data);
+                    const error = (data && data.message) || (response.status+" - "+response.statusText);
+                    login_message.className = "login-message-error";
+                    login_message.innerHTML = "POST /api/users error:<br />"+error;
+                    login_message.removeAttribute("hidden");
                 } else {
                     ReactSession.set("user", {"id": inputs.user_login, "name": inputs.user_name});
-                    alert("Usuário criado!");
+                    login_message.className = "login-message-success";
+                    login_message.innerHTML = "Usuário cadastrado!";
+                    login_message.removeAttribute("hidden");
+
                 }
             })
             .catch(error => {
@@ -61,6 +71,7 @@ function LoginPage() {
                 <div className="login-input">Nome: <input type="text" name="user_name" value={inputs.user_name || ""} onChange={handleChange}></input></div>
                 <div className="login-input"><input type="submit" name="user_submit" value="Entrar" /></div>
             </form>
+            <div id="login-message" className="login-message-loading" hidden>Mensagem</div>
         </div>
     );
 }
