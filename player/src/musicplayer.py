@@ -5,7 +5,7 @@ import json
 import os
 
 # API = "http://sextadamusica.local/api/"
-API = "http://localhost:8080/api/"
+API = "/api/"
 
 
 class MusicPlayer:

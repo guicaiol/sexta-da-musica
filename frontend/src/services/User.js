@@ -5,7 +5,7 @@ export async function verifyUserSession(user) {
 	// Check user session
 	if (user !== null && user !== undefined) {
 		// Check user exists
-		return await fetch("http://localhost:8080/api/users/" + user.id)
+		return await fetch("/api/users/" + user.id)
 			.then(async (response) => {
 				const isJson = response.headers
 					.get("content-type")
@@ -34,7 +34,7 @@ export async function login(id, name, endCallback) {
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({ id, name }),
 	};
-	let result = await fetch("http://localhost:8080/api/users", options)
+	let result = await fetch("/api/users", options)
 		.then(async (response) => {
 			const isJson = response.headers
 				.get("content-type")
@@ -86,7 +86,7 @@ export async function addMusic(user, url) {
 			body: JSON.stringify({ url }),
 		};
 		return await fetch(
-			"http://localhost:8080/api/users/" + user.id + "/musics",
+			"/api/users/" + user.id + "/musics",
 			options
 		)
 			.then(async (response) => {
@@ -109,7 +109,7 @@ export async function logout(user) {
 		const options = {
 			method: "DELETE",
 		};
-		return await fetch("http://localhost:8080/api/users/" + user.id, options)
+		return await fetch("/api/users/" + user.id, options)
 			.then(async (response) => {
 				Cookies.remove("id")
 				Cookies.remove("name")

@@ -1,7 +1,7 @@
 /** @format */
 
 export async function getNextSong() {
-	return await fetch("http://localhost:8080/api/player/next-music")
+	return await fetch("/api/player/next-music")
 		.then(async (response) => {
 			const isJson = response.headers
 				.get("content-type")
@@ -24,7 +24,7 @@ export async function getNextSong() {
 }
 
 export async function getCurrentSong() {
-	return await fetch("http://localhost:8080/api/player/status")
+	return await fetch("/api/player/status")
 		.then(async (response) => {
 			const isJson = response.headers
 				.get("content-type")
