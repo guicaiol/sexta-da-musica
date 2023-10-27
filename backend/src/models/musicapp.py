@@ -18,7 +18,7 @@ class MusicApp:
 
     def addUser(self, user: User) -> None:
         if(not self.userExists(user)):
-            self._users.append(user)
+            self._users.append(user) # TODO: add user before current user playing (FIFO)
 
     def userExists(self, user: User) -> bool:
         for user_i in self._users:

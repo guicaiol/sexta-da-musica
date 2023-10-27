@@ -58,7 +58,6 @@ function MainPage() {
 					justifyContent={"center"}
 				>
 					<PlayerContainer />
-					<HomePage user={user} />
 				</Box>
 			) : (
 				<HomePage user={user} />
