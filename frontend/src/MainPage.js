@@ -1,62 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import LoginPage from './LoginPage';
-import HomePage from './HomePage';
-import LoadingPage from './LoadingPage';
-import { ReactSession } from 'react-client-session';
-import './MainPage.css'
+/** @format */
+
+import React, { useState, useEffect, useContext } from "react";
+import LoginPage from "./LoginPage";
+import HomePage from "./HomePage";
+import LoadingPage from "./LoadingPage";
+import { ReactSession } from "react-client-session";
+import { verifyUserSession } from "./services/User";
+import Cookies from "js-cookie";
+
+import "./MainPage.css";
+import { PlayerContainer } from "./components/PlayerContainer";
+import { UserContext } from "./UserContext";
+import { Box } from "@mui/material";
 
 function MainPage() {
+	const [loading, setLoading] = useState(true);
+	const { user, setUser } = useContext(UserContext);
 
-    const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+	async function updateData() {
+		// Check user session
+		if (user === null) {
+			let sessionUser = null;
+			if (Cookies.get("id")) {
+				sessionUser = { id: Cookies.get("id"), name: Cookies.get("name") };
+			}
+			if (sessionUser !== null) {
+				let isAValidSession = await verifyUserSession(sessionUser);
+				console.log(isAValidSession);
 
-    function updateData() {
-        // Check user session
-        let session_user = ReactSession.get("user");
-        if(session_user!=null) {
-            // Check user exists
-            fetch("/api/users/"+session_user.id)
-                .then(async response => {
-                    const isJson = response.headers.get('content-type').includes('application/json');
-                    const data = isJson && await response.json();
-                    if(!response.ok) {
-                        const error = (data && data.message) || response.status;
-                        alert("GET /api/users/"+session_user.id+" error: "+error+"\nData: "+data);
-                        setUser(null);
-                        setIsLoggedIn(false);
-                        ReactSession.set("user", null);
-                    } else {
-                        setUser(session_user);
-                        setIsLoggedIn(true);
-                    }
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.error('There was an error!', error);
-                });
-        } else {
-            setLoading(false);
-        }
-    }
+				if (isAValidSession) {
+					console.log("uesrIsAlive");
+					setUser(sessionUser);
+				} else {
+					setUser(null);
+					ReactSession.set("user", null);
+				}
+			}
+		}
+		setLoading(false);
+	}
 
-    useEffect(() => {
-        // Update first time
-        updateData();
+	useEffect(() => {
+		updateData();
+	}, []);
 
-        // Setup interval to update constantly
-        const interval = setInterval(updateData, 5000);
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <>
-        <div className="MainPage">
-            {loading? <LoadingPage /> : !isLoggedIn? <LoginPage /> : <HomePage user={user} />}
-        </div>
-        <div className="Footer"><b>Sexta da Musica</b> - Contribua com esse projeto: <a href="https://github.com/guicaiol/sexta-da-musica" target="_blank" rel="noopener noreferrer">GitHub</a></div>
-        </>
-    );
+	return (
+		<>
+			{loading ? (
+				<LoadingPage />
+			) : user === null ? (
+				<LoginPage />
+			) : user.id === "player" ? (
+				<Box
+					display="flex"
+					flexDirection="column"
+					alignItems={"center"}
+					justifyContent={"center"}
+				>
+					<PlayerContainer />
+					<HomePage user={user} />
+				</Box>
+			) : (
+				<HomePage user={user} />
+			)}
+		</>
+	);
 }
 
 export default MainPage;
