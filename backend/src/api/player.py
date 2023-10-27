@@ -19,4 +19,4 @@ def api_player_next_music():
         return {"user": musicApp.currentUser().toJson(), "music": musicApp.currentMusic().toJson()}, 200
     else:
         # No music available yet (all users has empty queues)
-        return {"error": "music-not-ready", "reason": "All users queues are empty."}
+        return {"error": "music-not-ready", "reason": "All users queues are empty."}, 200

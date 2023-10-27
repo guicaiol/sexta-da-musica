@@ -1,3 +1,4 @@
+from __future__ import print_function # In python 2.7
 from models.user import User
 from models.music import Music
 
@@ -59,16 +60,17 @@ class MusicApp:
     def nextMusic(self) -> False:
         maxIterations: int = len(self._users)
         for i in range(0, maxIterations):
-            # Rotate to next user if already playing
-            if(self._playing):
-                self._currentUser += 1
-                if(self._currentUser >= len(self._users)):
-                    self._currentUser = 0
+            # Rotate to next user
+            self._currentUser += 1
+            if(self._currentUser >= len(self._users)):
+                self._currentUser = 0
 
             # Get next music from user
             user = self._users[self._currentUser]
             musics = user.musics()
-            if(len(musics) > 0):
+            numMusics = len(musics)
+            print(f"checking musics for user '{user.id()}', it has {numMusics} musics...")
+            if(numMusics > 0):
                 # Get first music from list, deleting from user list
                 self._currentMusic = musics[0]
                 self._users[self._currentUser].deleteMusic(0)
@@ -79,5 +81,6 @@ class MusicApp:
                 pass
         
         # No music available yet (all users has empty queues)
+        print("all users with empty queues! ")
         self._playing = False
         return False
