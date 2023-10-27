@@ -4,6 +4,10 @@ from time import sleep
 import json
 import os
 
+# API = "http://sextadamusica.local/api/"
+API = "http://localhost:8080/api/"
+
+
 class MusicPlayer:
 
     _state:int = 0
@@ -23,7 +27,7 @@ class MusicPlayer:
         while True:
             if self._state == MusicPlayer.State.STATE_FETCH_MUSIC:
                 print("- Requesting next music to backend...")
-                resp = requests.get("http://sextadamusica.local/api/player/next-music")
+                resp = requests.get(API + "player/next-music")
                 content = json.loads(resp.content)
                 print(f"Response: {resp.status_code}\n{content}")
                 print("OK!")

@@ -1,40 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import './App.css'
-import MainPage from './MainPage.js'
-import { ReactSession } from 'react-client-session';
+/** @format */
+
+import React, { useState, useEffect } from "react";
+import MainPage from "./MainPage.js";
+import { NavbarContainer } from "./components/Navbar/NavbarContainer";
+import { FooterContainer } from "./components/Footer/FooterContainer";
+import { Box, ThemeProvider } from "@mui/material";
+import { theme } from "./styles/theme";
+import { UserProvider } from "./UserContext.jsx";
 
 function App() {
-  ReactSession.setStoreType("localStorage");
-
-  const [date, setDate] = useState()
-
-  function updateData() {
-    // Update datetime
-    setDate(new Date().toLocaleString()+"")
-  }
-
-  useEffect(() => {
-    // Update first time
-    updateData();
-
-    // Setup interval to update constantly
-    const interval = setInterval(updateData, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="App">
-      <div className="app-header">
-        <div className="app-pagesize">
-          <div className="app-name">Sexta da Música</div>
-          <div className="app-datetime">{date}</div>
-        </div>
-      </div>
-      <div className="app-body">
-        <MainPage />
-      </div>
-    </div>
-  );
+	return (
+		<ThemeProvider theme={theme}>
+			<UserProvider>
+				<Box
+					height={"100vh"}
+					width={"100vw"}
+					display="flex"
+					alignItems="strech"
+					justifyContent={"space-between"}
+					flexDirection={"column"}
+				>
+					<NavbarContainer></NavbarContainer>
+					<Box
+						flexGrow={1}
+						alignSelf={"stretch"}
+						display="flex"
+						alignItems="center"
+						justifyContent={"center"}
+						bgcolor={"secondary.main"}
+					>
+						<MainPage />
+					</Box>
+					<FooterContainer></FooterContainer>
+				</Box>
+			</UserProvider>
+		</ThemeProvider>
+	);
 }
 
 export default App;

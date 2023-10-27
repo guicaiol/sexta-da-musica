@@ -66,10 +66,10 @@ def api_users_userid_musics(user_id: str):
         user = musicApp.getUser(user_id)
         if(user is not None):
             user.addMusic(Music(music_url))
-            return f"Música URL '{music_url}' adicionada para '{user_id}'.", 200
+            return {"message":f"Música URL '{music_url}' adicionada para '{user_id}'."}, 200
         
         # Not found
-        return f"User '{user_id}' does not exists.", 422
+        return {"error":f"User '{user_id}' does not exists."}, 422
 
 @api_users.route('/api/users/<user_id>/musics/<int:music_index>', methods=["DELETE"])
 def api_users_userid_musics_musicindex(user_id: str, music_index: int):

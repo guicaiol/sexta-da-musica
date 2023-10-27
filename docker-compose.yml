@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+
+  front:
+    image: node:16
+    restart: always
+    working_dir: /home/node/front
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    networks:
+      - main-network
+    volumes:
+      - ./frontend:/home/node/front
+    command: sh -c "yarn && yarn start"
+
+networks:
+  main-network:
+   
