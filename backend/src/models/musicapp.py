@@ -45,6 +45,7 @@ class MusicApp:
         for user in self._users:
             if(user.id() == user_id):
                 self._users.pop(index)
+                self._recalculateQueue()
                 return True
             index += 1
         return False
@@ -127,7 +128,7 @@ class MusicApp:
                 pass
         
         # No music available yet (all users has empty queues)
-        print("all users with empty queues! ")
+        #print("all users with empty queues! ")
         self._playing = False
         return False
 
