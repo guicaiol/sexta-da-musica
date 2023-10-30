@@ -20,3 +20,7 @@ def api_player_next_music():
     else:
         # No music available yet (all users has empty queues)
         return {"error": "music-not-ready", "reason": "All users queues are empty."}, 200
+
+@api_player.route('/api/player/queue', methods=["GET"])
+def api_player_queue():
+    return musicApp.getQueue(), 200

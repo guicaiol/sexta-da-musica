@@ -65,7 +65,7 @@ def api_users_userid_musics(user_id: str):
         # Check if user already exists
         user = musicApp.getUser(user_id)
         if(user is not None):
-            user.addMusic(Music(music_url))
+            musicApp.addMusicToUser(user_id, Music(music_url))
             return {"message":f"Música URL '{music_url}' adicionada para '{user_id}'."}, 200
         
         # Not found
