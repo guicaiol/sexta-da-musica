@@ -9,7 +9,7 @@ class MusicApp:
     _currentUser: int = 0
     _playing: bool = False
     _currentMusic: Music = None
-    _queue: list[Music] = []
+    _queue: list[dict] = []
 
     def __init__(self) -> None:
         pass
@@ -64,7 +64,7 @@ class MusicApp:
 
     # Queue management
     def _recalculateQueue(self) -> None:
-        queue: list[Music] = []
+        queue: list[dict] = []
         currentUser = self._currentUser
         users: list[User] = copy.deepcopy(self._users)
 
@@ -83,7 +83,7 @@ class MusicApp:
             if(numMusics > 0):
                 # Get first music from list, deleting from user list
                 music = musics[0]
-                queue.append(music)
+                queue.append({"username": user.name(), "music": music.toJson()})
                 users[currentUser].deleteMusic(0)
                 emptyQueues = 0
             else:
@@ -131,5 +131,5 @@ class MusicApp:
         self._playing = False
         return False
 
-    def getQueue(self) -> list[Music]:
-        return [music.toJson() for music in self._queue]
+    def getQueue(self) -> list[dict]:
+        return self._queue
