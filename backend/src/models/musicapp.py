@@ -53,6 +53,14 @@ class MusicApp:
         user: User = self.getUser(user_id)
         user.addMusic(music)
         self._recalculateQueue()
+    
+    def deleteMusicFromUser(self, user_id: str, music_index: int) -> bool:
+        user: User = self.getUser(user_id)
+        if(user.deleteMusic(music_index)):
+            self._recalculateQueue()
+            return True
+        else:
+            return False
 
     # Queue management
     def _recalculateQueue(self) -> None:
@@ -78,15 +86,11 @@ class MusicApp:
                 queue.append(music)
                 users[currentUser].deleteMusic(0)
                 emptyQueues = 0
-                print(f"_recalculateQueue - checking user '{user.id()}', adding music to queue: {music}...")
             else:
-                print(f"_recalculateQueue - checking user '{user.id()}', empty, emptyQueues={emptyQueues}, maxIterations={maxIterations}")
                 emptyQueues += 1
 
         # Set new queue
-        print(f"_recalculateQueue - queue={queue}")
         self._queue = queue
-        print(f"_recalculateQueue - self._queue={self._queue}")
 
     # Player management
     def playing(self) -> bool:
@@ -110,7 +114,7 @@ class MusicApp:
             user = self._users[self._currentUser]
             musics = user.musics()
             numMusics = len(musics)
-            print(f"checking musics for user '{user.id()}', it has {numMusics} musics...")
+            #print(f"checking musics for user '{user.id()}', it has {numMusics} musics...")
             if(numMusics > 0):
                 # Get first music from list, deleting from user list
                 self._currentMusic = musics[0]

@@ -77,7 +77,7 @@ def api_users_userid_musics_musicindex(user_id: str, music_index: int):
         # Check if user already exists
         user = musicApp.getUser(user_id)
         if(user is not None):
-            if(user.deleteMusic(music_index)):
+            if(musicApp.deleteMusicFromUser(user_id, music_index)):
                 return f"Music index {music_index} deleted for user '{user_id}'.", 200
             else:
                 return f"Music index {music_index} does not exists for user '{user_id}'.", 422
